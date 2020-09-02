@@ -205,6 +205,7 @@ protected:
         FragmentSampler,
         UniformBuffer,
         IndexBuffer,
+        UintFragmentTexture,
     };
 
     struct Buffer {
