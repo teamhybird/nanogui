@@ -199,15 +199,11 @@ Shader::Shader(RenderPass *render_pass,
                 break;
 
             case GL_SAMPLER_2D:
-                buf.dtype = VariableType::Invalid;
-                buf.ndim = 0;
-                buf.type = FragmentTexture;
-                break;
-
+            case GL_INT_SAMPLER_2D:
             case GL_UNSIGNED_INT_SAMPLER_2D:
                 buf.dtype = VariableType::Invalid;
                 buf.ndim = 0;
-                buf.type = UintFragmentTexture;
+                buf.type = FragmentTexture;
                 break;
 
             default:
@@ -334,7 +330,7 @@ void Shader::set_texture(const std::string &name, Texture *texture) {
         throw std::runtime_error(
             "Shader::set_texture(): could not find argument named \"" + name + "\"");
     Buffer &buf = m_buffers[name];
-    if (!(buf.type == VertexTexture || buf.type == FragmentTexture || buf.type == UintFragmentTexture))
+    if (!(buf.type == VertexTexture || buf.type == FragmentTexture))
         throw std::runtime_error(
             "Shader::set_texture(): argument named \"" + name + "\" is not a texture!");
 
@@ -366,7 +362,7 @@ void Shader::begin() {
         GLenum gl_type = 0;
 
 #if defined(NANOGUI_USE_OPENGL)
-        if (!buf.dirty && buf.type != VertexTexture && buf.type != FragmentTexture && buf.type != UintFragmentTexture)
+        if (!buf.dirty && buf.type != VertexTexture && buf.type != FragmentTexture)
             continue;
 #endif
 
@@ -405,7 +401,6 @@ void Shader::begin() {
 
             case VertexTexture:
             case FragmentTexture:
-            case UintFragmentTexture:
                 CHK(glActiveTexture(GL_TEXTURE0 + texture_unit));
                 CHK(glBindTexture(GL_TEXTURE_2D, (GLuint) ((uintptr_t) buf.buffer)));
                 if (buf.dirty)
