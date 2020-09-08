@@ -104,7 +104,7 @@ bool ImageView::mouse_drag_event(const Vector2i & /* p */, const Vector2i &rel,
     if (!m_enabled || !m_image)
         return false;
 
-    m_offset += rel * screen()->pixel_ratio();
+    m_offset += Vector2f(rel) * screen()->pixel_ratio(); // CPM fix scrolling when operating system has screen ratio 125%
 
     return true;
 }
