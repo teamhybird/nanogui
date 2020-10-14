@@ -218,6 +218,7 @@ void Texture::download(uint8_t *data) {
 
     (void) internal_format_gl;
     CHK(glBindTexture(GL_TEXTURE_2D, m_texture_handle));
+    CHK(glPixelStorei(GL_PACK_ALIGNMENT, 1));
     CHK(glGetTexImage(GL_TEXTURE_2D, 0, pixel_format_gl, component_format_gl, data));
 
     if (m_flags & (uint8_t) TextureFlags::RenderTarget) {
